@@ -21,3 +21,15 @@ class AddCrawlView(generic.edit.CreateView):
 class CrawlView(generic.DetailView):
     model = Crawl
     template_name = "crawl_space/crawl.html"
+
+    def get_object(self):
+        return Crawl.objects.get(
+            project=Project.objects.get(slug=self.kwargs['slug']),
+            slug=self.kwargs['crawl_slug'])
+
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['project'] = self.object.project
+        return context
