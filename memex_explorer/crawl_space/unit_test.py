@@ -13,7 +13,7 @@ def assert_form_errors(response, *errors):
     are present in the form response.
     """
     efe = expected_form_errors = set(errors)
-    assert efe - set(form_errors(response).keys()) == set()
+    assert set(form_errors(response).keys()) - efe == set()
 
 
 class TestViews(UnitTestSkeleton):
@@ -47,7 +47,7 @@ class TestViews(UnitTestSkeleton):
     def test_add_crawl_no_name(self):
         response = self.post('base:crawl_space:add_crawl',
             {'description': 'Find all the cats.',
-             'crawler': 'TODO proper form input'},
+             'crawler': 'ache'},
             **self.slugs)
         assert_form_errors(response, 'name')
 
@@ -56,7 +56,7 @@ class TestViews(UnitTestSkeleton):
         response = self.post('base:crawl_space:add_crawl',
             {'name': 'Cat Crawl',
              'description': 'Find all the cats.',
-             'crawler': 'TODO proper form input'},
+             'crawler': 'ache'},
             **self.slugs)
         assert 'crawl_space/crawl.html' in response.template_name
 
