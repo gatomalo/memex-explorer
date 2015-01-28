@@ -13,10 +13,17 @@ from django.core.urlresolvers import reverse
 
 
 class Crawl(models.Model):
+
+    CRAWLER_CHOICES = (
+        ('nutch', "Nutch"),
+        ('ache', "ACHE"))
+
     name = models.CharField(max_length=64)
     slug = models.CharField(max_length=64)
     description = models.TextField()
-    crawler = models.CharField(max_length=64)
+    crawler = models.CharField(max_length=64,
+        choices=CRAWLER_CHOICES,
+        default='nutch')
     status = models.CharField(max_length=64)
     config = models.CharField(max_length=64)
     seeds_list = models.CharField(max_length=64)
