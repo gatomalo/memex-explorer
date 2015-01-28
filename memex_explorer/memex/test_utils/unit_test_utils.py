@@ -7,6 +7,9 @@ from django.core.urlresolvers import reverse
 def form_errors(response):
     return response.context['form'].errors
 
+def get_object(response):
+    return response.context['object']
+
 class UnitTestSkeleton(TestCase):
 
     @classmethod

@@ -1,5 +1,5 @@
 # Test
-from memex.test_utils.unit_test_utils import UnitTestSkeleton, form_errors
+from memex.test_utils.unit_test_utils import UnitTestSkeleton, form_errors, get_object
 from django.test import TestCase
 
 # App
@@ -21,11 +21,11 @@ class TestViews(UnitTestSkeleton):
     @classmethod
     def setUpClass(cls):
         super(TestViews, cls).setUpClass()
-        test_project = Project(
+        cls.test_project = Project(
             name = "Test",
             description = "Description",
             icon = "fa-arrows")
-        test_project.save()
+        cls.test_project.save()
 
 
     @property
@@ -60,6 +60,12 @@ class TestViews(UnitTestSkeleton):
             **self.slugs)
         assert 'crawl_space/crawl.html' in response.template_name
 
+        # Crawl name, slug is as expected
+        crawl = get_object(response)
+        assert (crawl.name, crawl.slug) == ("Cat Crawl", "cat-crawl")
+
+        # Crawl is linked to the right project
+        assert crawl.project == self.test_project
 
 # class TestForms(TestCase):
 #     pass
