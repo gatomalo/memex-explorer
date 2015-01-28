@@ -1,12 +1,10 @@
 # Test
-from memex.test_utils.unit_test_utils import UnitTestSkeleton
+from memex.test_utils.unit_test_utils import UnitTestSkeleton, form_errors
 from django.test import TestCase
 
 # App
 from base.forms import AddProjectForm
 
-def form_errors(response):
-    return response.context['form'].errors
 
 
 class TestViews(UnitTestSkeleton):
@@ -40,7 +38,7 @@ class TestViews(UnitTestSkeleton):
         assert 'This field is required.' in form_errors(response)['description']
 
 
-    def test_add_project(self):
+    def test_add_project_success(self):
         response = self.post('base:add_project',
             {'name': 'CATS',
              'description': 'cats cats cats',
@@ -50,7 +48,7 @@ class TestViews(UnitTestSkeleton):
 
 
     def test_add_project_with_right_slug(self):
-        self.test_add_project()
+        self.test_add_project_success()
 
         response = self.get('base:project',
             slugs=dict(slug="cats"))

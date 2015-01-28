@@ -4,6 +4,8 @@ from django.test import TestCase, Client
 # Utility
 from django.core.urlresolvers import reverse
 
+def form_errors(response):
+    return response.context['form'].errors
 
 class UnitTestSkeleton(TestCase):
 
