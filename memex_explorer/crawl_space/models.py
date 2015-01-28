@@ -1,6 +1,7 @@
 from django.db import models
 from base.models import Project
 from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 
 
 # class DataModel(models.Model):
@@ -28,10 +29,13 @@ class Crawl(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        assert False
         self.slug = slugify(self.name)
         super(Crawl, self).save(*args, **kwargs)
 
+
+    def get_absolute_url(self):
+        return reverse('base:crawl_space:crawl',
+            kwargs=dict(slug=self.project.slug, crawl_slug=self.slug))
 
 # class DataSource(models.Model):
 #     name = models.CharField(max_length=64)
