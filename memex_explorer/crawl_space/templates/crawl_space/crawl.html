@@ -82,12 +82,31 @@
             <a>Get Images</a>
         </button>
         {% endif %}
-      {% if crawl.description %}
       <h3>Description</h3>
       <p>{{ crawl.description }}</p>
-      {% endif %}
+
+
+
+
       <h3>Summary Statistics</h3>
-        <span id="stats-data">Getting crawl statistics...</span>
+        <table data-toggle="table">
+          <thead>
+            <tr>
+              <th>Pages Crawled</th>
+              <th>Harvest Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span id="stats-pages">{{ crawl.pages_crawled }}</span></td>
+              <td><span id="stats-harvest">{{ crawl.harvest_rate }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+
       {% if crawl.crawler == 'ache' %}
       <h3>Crawl Model</h3>
       <p> {{ model.name }}</p>
