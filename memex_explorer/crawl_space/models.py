@@ -17,14 +17,16 @@ from django.conf import settings as app_settings
 class Crawl(models.Model):
 
     def get_upload_path(instance, filename):
-        return os.path.join(app_settings.BASE_DIR,
-            ''))
+        return os.path.join(instance.slug, filename)
+
+    def get_seeds_upload_path(instance, filename):
+        return os.path.join(instance.slug, 'seeds', filename)
 
     CRAWLER_CHOICES = (
         ('nutch', "Nutch"),
         ('ache', "ACHE"))
 
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     slug = models.CharField(max_length=64)
     description = models.TextField()
     crawler = models.CharField(max_length=64,
@@ -32,7 +34,7 @@ class Crawl(models.Model):
         default='nutch')
     status = models.CharField(max_length=64)
     config = models.CharField(max_length=64)
-    seeds_list = models.FileField(upload_to=get_upload_path)
+    seeds_list = models.FileField(upload_to=get_seeds_upload_path)
     pages_crawled = models.BigIntegerField(default=0)
     harvest_rate = models.FloatField(default=0)
     project = models.ForeignKey(Project)
@@ -49,3 +51,4 @@ class Crawl(models.Model):
     def get_absolute_url(self):
         return reverse('base:crawl_space:crawl',
             kwargs=dict(slug=self.project.slug, crawl_slug=self.slug))
+
