@@ -45,7 +45,7 @@ coverage.xml
 *.mo
 *.pot
 
-# Django stuff:
+# Django stuff
 *.log
 db.sqlite3
 
@@ -54,3 +54,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# OSX
+.DS_Store
