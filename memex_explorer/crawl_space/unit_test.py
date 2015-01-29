@@ -52,6 +52,15 @@ class TestViews(UnitTestSkeleton):
         assert_form_errors(response, 'name')
 
 
+    def test_add_crawl_bad_crawler(self):
+        response = self.post('base:crawl_space:add_crawl',
+            {'name': 'Cat Crawl',
+             'description': 'Find all the cats.',
+             'crawler': 'fake!'},
+            **self.slugs)
+        assert_form_errors(response, 'crawler')
+
+
     def test_add_crawl_success(self):
         response = self.post('base:crawl_space:add_crawl',
             {'name': 'Cat Crawl',

@@ -6,6 +6,6 @@ from crawl_space.models import Crawl
 class AddCrawlForm(ModelForm):
     class Meta:
         model = Crawl
-        fields = ['name', 'description', 'crawler']
+        fields = ['name', 'description', 'crawler', 'seed_list']
         widgets = {'crawler': RadioSelect}
 
