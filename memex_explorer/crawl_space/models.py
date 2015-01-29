@@ -1,7 +1,7 @@
 import os
 
 from django.db import models
-from base.models import Project
+from base.models import Project, alphanumeric_validator
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 
@@ -18,14 +18,15 @@ class Crawl(models.Model):
 
     def get_upload_path(instance, filename):
         return os.path.join(app_settings.BASE_DIR,
-            ''))
+            'seeds')
 
     CRAWLER_CHOICES = (
         ('nutch', "Nutch"),
         ('ache', "ACHE"))
 
-    name = models.CharField(max_length=64)
-    slug = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True,
+        validators=[alphanumeric_validator()])
+    slug = models.SlugField(max_length=64, unique=True)
     description = models.TextField()
     crawler = models.CharField(max_length=64,
         choices=CRAWLER_CHOICES,
