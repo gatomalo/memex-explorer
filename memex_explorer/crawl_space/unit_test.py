@@ -38,6 +38,13 @@ class TestViews(UnitTestSkeleton):
 
 
     @property
+    def form_data(self):
+        return {'name': 'Cat Crawl',
+             'description': 'Find all the cats.',
+             'crawler': 'ache'}
+    
+
+    @property
     def slugs(self):
         return dict(slugs=dict(
             slug="test"))
