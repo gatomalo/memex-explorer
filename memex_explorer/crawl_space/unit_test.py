@@ -38,6 +38,7 @@ class TestViews(UnitTestSkeleton):
             seeds_list = "ERROR",
             project = cls.test_project)
         cls.test_crawl.save()
+        cls.seeds = SimpleUploadedFile('ht.seeds', bytes('This is some content.\n', 'utf-8'))
 
 
     @property
@@ -72,10 +73,9 @@ class TestViews(UnitTestSkeleton):
         response = self.post('base:crawl_space:add_crawl',
             {'description': 'Find all the cats.',
              'crawler': 'ache',
-             'seeds_list': self.seeds},
+             'seeds_list': },
             **self.slugs)
-        assert_form_errors(response, 'name')
-
+        assert not response.context['form'].errors
 
     def test_add_crawl_bad_crawler(self):
         response = self.post('base:crawl_space:add_crawl',
