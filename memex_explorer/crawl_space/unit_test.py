@@ -23,15 +23,30 @@ class TestViews(UnitTestSkeleton):
         super(TestViews, cls).setUpClass()
         cls.test_project = Project(
             name = "Test",
-            description = "Description",
+            description = "Test Project Description",
             icon = "fa-arrows")
         cls.test_project.save()
+
+        cls.test_crawl = Crawl(
+            name = "Test Crawl",
+            description = "Test Crawl Description",
+            crawler = "ache",
+            config = "config_default",
+            seeds_list = "ERROR",
+            project = cls.test_project)
+        cls.test_crawl.save()
 
 
     @property
     def slugs(self):
         return dict(slugs=dict(
             slug="test"))
+
+    @property
+    def crawl_slugs(self):
+        return dict(slugs=dict(
+            slug="test",
+            crawl_slug="test-crawl"))
 
 
     def test_add_crawl_page(self):
@@ -75,6 +90,17 @@ class TestViews(UnitTestSkeleton):
 
         # Crawl is linked to the right project
         assert crawl.project == self.test_project
+
+    def test_crawl_page(self):
+        response = self.get('base:crawl_space:crawl', **self.crawl_slugs)
+        assert 'crawl_space/crawl.html' in response.template_name
+
+        crawl = get_object(response)
+        assert (crawl.name, crawl.slug) == ("Test Crawl", "test-crawl")
+
+        # Crawl is linked to the right project
+        assert crawl.project == self.test_project
+
 
 # class TestForms(TestCase):
 #     pass

@@ -31,7 +31,8 @@ class Crawl(models.Model):
     crawler = models.CharField(max_length=64,
         choices=CRAWLER_CHOICES,
         default='nutch')
-    status = models.CharField(max_length=64)
+    status = models.CharField(max_length=64,
+        default="Not started")
     config = models.CharField(max_length=64)
     seeds_list = models.FileField(upload_to=get_upload_path)
     pages_crawled = models.BigIntegerField(default=0)
