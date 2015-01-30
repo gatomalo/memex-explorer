@@ -38,8 +38,9 @@ class TestViews(UnitTestSkeleton):
             seeds_list = "ERROR",
             project = cls.test_project)
         cls.test_crawl.save()
-        cls.seeds = SimpleUploadedFile('ht.seeds', bytes('This is some content.\n', 'utf-8'))
 
+    def get_seeds(self):
+         return SimpleUploadedFile('ht.seeds', bytes('This is some content.\n', 'utf-8'))
 
     @property
     def form_data(self):
@@ -73,26 +74,37 @@ class TestViews(UnitTestSkeleton):
         response = self.post('base:crawl_space:add_crawl',
             {'description': 'Find all the cats.',
              'crawler': 'ache',
-             'seeds_list': self.seeds},
+             'seeds_list': self.get_seeds()},
             **self.slugs)
-        assert not response.context['form'].errors
+        assert_form_errors(response, 'name')
 
     def test_add_crawl_bad_crawler(self):
         response = self.post('base:crawl_space:add_crawl',
             {'name': 'Cat Crawl',
              'description': 'Find all the cats.',
+             'seeds_list': self.get_seeds(),
              'crawler': 'fake!'},
             **self.slugs)
         assert_form_errors(response, 'crawler')
 
 
-    def test_add_crawl_success(self):
+    def test_add_crawl_no_seeds(self):
         response = self.post('base:crawl_space:add_crawl',
             {'name': 'Cat Crawl',
              'description': 'Find all the cats.',
              'crawler': 'ache'},
             **self.slugs)
+        assert_form_errors(response, 'seeds_list')
+
+    def test_add_crawl_success(self):
+        response = self.post('base:crawl_space:add_crawl',
+            {'name': 'Cat Crawl',
+             'description': 'Find all the cats.',
+             'seeds_list': self.get_seeds(),
+             'crawler': 'ache'},
+            **self.slugs)
         assert 'crawl_space/crawl.html' in response.template_name
+
 
         # Crawl name, slug is as expected
         crawl = get_object(response)
