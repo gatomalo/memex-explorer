@@ -1,7 +1,7 @@
 import os
 
 from django.db import models
-from base.models import Project
+from base.models import Project, alphanumeric_validator
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 
@@ -26,13 +26,15 @@ class Crawl(models.Model):
         ('nutch', "Nutch"),
         ('ache', "ACHE"))
 
-    name = models.CharField(max_length=64, unique=True)
-    slug = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True,
+        validators=[alphanumeric_validator()])
+    slug = models.SlugField(max_length=64, unique=True)
     description = models.TextField()
     crawler = models.CharField(max_length=64,
         choices=CRAWLER_CHOICES,
         default='nutch')
-    status = models.CharField(max_length=64)
+    status = models.CharField(max_length=64,
+        default="Not started")
     config = models.CharField(max_length=64)
     seeds_list = models.FileField(upload_to=get_seeds_upload_path)
     pages_crawled = models.BigIntegerField(default=0)
