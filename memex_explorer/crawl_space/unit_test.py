@@ -73,7 +73,7 @@ class TestViews(UnitTestSkeleton):
         response = self.post('base:crawl_space:add_crawl',
             {'description': 'Find all the cats.',
              'crawler': 'ache',
-             'seeds_list': },
+             'seeds_list': self.seeds},
             **self.slugs)
         assert not response.context['form'].errors
 
