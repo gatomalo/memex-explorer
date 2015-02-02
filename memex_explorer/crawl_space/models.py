@@ -27,6 +27,10 @@ class DataModel(models.Model):
     features = models.FileField(upload_to=get_upload_path, validators=[validate_features_file])
     project = models.ForeignKey(Project)
 
+    def get_absolute_url(self):
+        return reverse('base:project',
+            kwargs=dict(slug=self.project.slug))
+
     def __str__(self):
         return self.name
 

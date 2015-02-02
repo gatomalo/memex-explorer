@@ -38,9 +38,11 @@ class CrawlView(generic.DetailView):
 class AddDataModelView(generic.edit.CreateView):
     form_class = AddDataModelForm
     template_name = "crawl_space/add_data_model.html"
-    success_url = "/"
 
     def form_valid(self, form):
         form.instance.project = Project.objects.get(slug=self.kwargs['slug'])
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
