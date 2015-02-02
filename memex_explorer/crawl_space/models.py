@@ -4,23 +4,39 @@ from django.db import models
 from base.models import Project, alphanumeric_validator
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
-# class DataModel(models.Model):
-#     name = models.CharField(max_length=64)
-#     project = models.ForeignKey(Project)
 
-#     def __str__(self):
-#         return self.name
+def validate_model_file(value):
+    if value != 'pageclassifier.model':
+        raise ValidationError("Model file must be named 'pageclassifier.model'.")
+
+
+def validate_features_file(value):
+    if value != 'pageclassifier.features':
+        raise ValidationError("Features file must be named 'pageclassifier.features'.")
+
+
+class DataModel(models.Model):
+
+    def get_upload_path(instance, filename):
+        return os.path.join('models', instance.name, filename)
+    
+    name = models.CharField(max_length=64)
+    model = models.FileField(upload_to=get_upload_path, validators=[validate_model_file])
+    features = models.FileField(upload_to=get_upload_path, validators=[validate_features_file])
+    project = models.ForeignKey(Project)
+
+    def __str__(self):
+        return self.name
+
 
 from django.conf import settings as app_settings
 
 class Crawl(models.Model):
 
-    def get_upload_path(instance, filename):
-        return os.path.join(instance.slug, filename)
-
     def get_seeds_upload_path(instance, filename):
-        return os.path.join(instance.slug, 'seeds', filename)
+        return os.path.join('seeds', instance.name, filename)
 
     CRAWLER_CHOICES = (
         ('nutch', "Nutch"),
@@ -40,7 +56,7 @@ class Crawl(models.Model):
     pages_crawled = models.BigIntegerField(default=0)
     harvest_rate = models.FloatField(default=0)
     project = models.ForeignKey(Project)
-    # data_model = models.ForeignKey(DataModel)
+    data_model = models.ForeignKey(DataModel)
 
     def __str__(self):
         return self.name
