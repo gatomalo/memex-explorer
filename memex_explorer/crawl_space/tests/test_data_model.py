@@ -14,7 +14,7 @@ class TestAddDataModelView(UnitTestSkeleton):
     def setUpClass(cls):
         super(TestAddDataModelView, cls).setUpClass()
         cls.test_project = Project(
-            name = "Data Model Test",
+            name = "Model Test",
             description = "Test Project Description",
             icon = "fa-arrows")
         cls.test_project.save()
@@ -22,7 +22,7 @@ class TestAddDataModelView(UnitTestSkeleton):
     @property
     def slugs(self):
         return dict(slugs=dict(
-            slug="data-model-test"))
+            slug="model-test"))
 
     def test_add_model_page(self):
         response = self.get('base:crawl_space:add_data_model', **self.slugs)
