@@ -1,0 +1,35 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<script>
+$( document ).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+{% include "base/sidebar.html" %}
+
+<div class='row'>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1>Data Models</h1>
+        <br>
+        {% if data_models %}
+        <ul class="list-group">
+            {% for x in data_models %}
+        <div class="col-sm-6">
+            <li class="list-group-item">{{ x.name }}</li>
+        </div>
+        <div class="col-sm-1">
+            <a href="#"><i class="fa fa-close" style="font-size:24px;"></i></a>
+        </div>
+        <br>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No data models have been registered.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

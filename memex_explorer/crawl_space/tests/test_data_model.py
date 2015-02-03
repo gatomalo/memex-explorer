@@ -32,6 +32,12 @@ class TestAddDataModelView(UnitTestSkeleton):
     def get_features_file(self):
         return SimpleUploadedFile('pageclassifier.features', bytes('This is a features file.\n', 'utf-8'))
 
+    def get_bad_model_file(self):
+        return SimpleUploadedFile('model.txt', bytes('This is a model file.\n', 'utf-8'))
+
+    def get_bad_features_file(self):
+        return SimpleUploadedFile('features.txt', bytes('This is a features file.\n', 'utf-8'))
+
     def test_add_model_page(self):
         response = self.get('base:crawl_space:add_data_model', **self.slugs)
         assert 'crawl_space/add_data_model.html' in response.template_name
@@ -66,6 +72,26 @@ class TestAddDataModelView(UnitTestSkeleton):
             },
             **self.slugs)
         assert_form_errors(response, 'features')
+
+    def test_add_model_bad_model_name(self):
+        response = self.post('base:crawl_space:add_data_model',
+            {
+                'name': 'Test Model',
+                'model': self.get_bad_model_file(),
+                'features': self.get_features_file(),
+            },
+            **self.slugs)
+        assert "Model file must be named 'pageclassifier.model'." in form_errors(response)['model']
+
+    def test_add_model_bad_model_name(self):
+        response = self.post('base:crawl_space:add_data_model',
+            {
+                'name': 'Test Model',
+                'model': self.get_model_file(),
+                'features': self.get_bad_features_file(),
+            },
+            **self.slugs)
+        assert "Features file must be named 'pageclassifier.features'." in form_errors(response)['features']
 
     def test_add_model_success(self):
         response = self.post('base:crawl_space:add_data_model',

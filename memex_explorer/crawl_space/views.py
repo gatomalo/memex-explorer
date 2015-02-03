@@ -2,7 +2,7 @@ from django.views import generic
 from django.apps import apps
 
 from base.models import Project
-from crawl_space.models import Crawl
+from crawl_space.models import Crawl, DataModel
 from crawl_space.forms import AddCrawlForm, AddDataModelForm
 
 
@@ -32,6 +32,20 @@ class CrawlView(generic.DetailView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         context['project'] = self.object.project
+        return context
+
+
+class DataModelView(generic.ListView):
+    model = DataModel
+    template_name = 'crawl_space/models.html'
+    context_object_name = 'data_models'
+
+    def get_object(self):
+        return Project.objects.get(slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project'] = self.get_object()
         return context
 
 
