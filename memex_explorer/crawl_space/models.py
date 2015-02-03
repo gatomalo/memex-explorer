@@ -60,7 +60,8 @@ class Crawl(models.Model):
     pages_crawled = models.BigIntegerField(default=0)
     harvest_rate = models.FloatField(default=0)
     project = models.ForeignKey(Project)
-    data_model = models.ForeignKey(DataModel)
+    data_model = models.ForeignKey(DataModel, null=True, blank=True, 
+        default=None)
 
     def __str__(self):
         return self.name
