@@ -3,7 +3,7 @@ from django.apps import apps
 
 from base.models import Project
 from crawl_space.models import Crawl
-from crawl_space.forms import AddCrawlForm, AddDataModelForm
+from crawl_space.forms import AddCrawlForm, AddCrawlModelForm
 
 
 class AddCrawlView(generic.edit.CreateView):
@@ -27,7 +27,6 @@ class CrawlView(generic.DetailView):
             project=Project.objects.get(slug=self.kwargs['slug']),
             slug=self.kwargs['crawl_slug'])
 
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -35,9 +34,9 @@ class CrawlView(generic.DetailView):
         return context
 
 
-class AddDataModelView(generic.edit.CreateView):
-    form_class = AddDataModelForm
-    template_name = "crawl_space/add_data_model.html"
+class AddCrawlModelView(generic.edit.CreateView):
+    form_class = AddCrawlModelForm
+    template_name = "crawl_space/add_crawl_model.html"
 
     def form_valid(self, form):
         form.instance.project = Project.objects.get(slug=self.kwargs['slug'])
