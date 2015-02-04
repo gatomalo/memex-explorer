@@ -27,7 +27,6 @@ class CrawlView(generic.DetailView):
             project=Project.objects.get(slug=self.kwargs['slug']),
             slug=self.kwargs['crawl_slug'])
 
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -35,10 +34,10 @@ class CrawlView(generic.DetailView):
         return context
 
 
-class DataModelView(generic.ListView):
-    model = DataModel
+class CrawlModelView(generic.ListView):
+    model = CrawlModel
     template_name = 'crawl_space/models.html'
-    context_object_name = 'data_models'
+    context_object_name = 'crawl_models'
 
     def get_object(self):
         return Project.objects.get(slug=self.kwargs['slug'])
@@ -49,9 +48,9 @@ class DataModelView(generic.ListView):
         return context
 
 
-class AddDataModelView(generic.edit.CreateView):
-    form_class = AddDataModelForm
-    template_name = "crawl_space/add_data_model.html"
+class AddCrawlModelView(generic.edit.CreateView):
+    form_class = AddCrawlModelForm
+    template_name = "crawl_space/add_crawl_model.html"
 
     def form_valid(self, form):
         form.instance.project = Project.objects.get(slug=self.kwargs['slug'])

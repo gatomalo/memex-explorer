@@ -39,15 +39,15 @@ class TestAddDataModelView(UnitTestSkeleton):
         return SimpleUploadedFile('features.txt', bytes('This is a features file.\n', 'utf-8'))
 
     def test_add_model_page(self):
-        response = self.get('base:crawl_space:add_data_model', **self.slugs)
-        assert 'crawl_space/add_data_model.html' in response.template_name
+        response = self.get('base:crawl_space:add_crawl_model', **self.slugs)
+        assert 'crawl_space/add_crawl_model.html' in response.template_name
 
     def test_add_model_no_data(self):
-        response = self.post('base:crawl_space:add_data_model', **self.slugs)
+        response = self.post('base:crawl_space:add_crawl_model', **self.slugs)
         assert_form_errors(response, 'name', 'model', 'features')
 
     def test_add_model_no_name(self):
-         response = self.post('base:crawl_space:add_data_model',
+         response = self.post('base:crawl_space:add_crawl_model',
             {
                 'model': self.get_model_file(),
                 'features': self.get_features_file(),
@@ -56,7 +56,7 @@ class TestAddDataModelView(UnitTestSkeleton):
          assert_form_errors(response, 'name')
 
     def test_add_model_no_model(self):
-        response = self.post('base:crawl_space:add_data_model',
+        response = self.post('base:crawl_space:add_crawl_model',
            {
                'name': 'Test Model',
                'features': self.get_features_file(),
@@ -65,7 +65,7 @@ class TestAddDataModelView(UnitTestSkeleton):
         assert_form_errors(response, 'model')
 
     def test_add_model_no_features(self):
-        response = self.post('base:crawl_space:add_data_model',
+        response = self.post('base:crawl_space:add_crawl_model',
             {
                 'name': 'Test Model',
                 'model': self.get_model_file(),
@@ -94,7 +94,7 @@ class TestAddDataModelView(UnitTestSkeleton):
         assert "Features file must be named 'pageclassifier.features'." in form_errors(response)['features']
 
     def test_add_model_success(self):
-        response = self.post('base:crawl_space:add_data_model',
+        response = self.post('base:crawl_space:add_crawl_model',
             {
                 'name': 'Test Model',
                 'model': self.get_model_file(),
